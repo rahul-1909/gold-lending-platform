@@ -6,7 +6,9 @@ import org.springframework.stereotype.Repository;
 
 
 
+import java.util.Optional;
+
 @Repository
 public interface GoldRateRepository extends JpaRepository<GoldRate, Integer> {
-
+    Optional<GoldRate> findByKaratLabel(String karatLabel);
 }

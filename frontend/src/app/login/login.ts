@@ -1,11 +1,12 @@
-// src/app/login/login.ts
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../core/services/auth.service';
 import { environment } from '../../environments/environment';
+
+import { BullionService, GoldRate } from '../core/services/bullion.service';
 
 @Component({
   selector: 'app-login',
@@ -25,14 +26,23 @@ export class LoginComponent implements OnInit {
   errorMessage: string | null = null;
   successMessage: string | null = null; 
 
+  rate24K: string = '₹ 14,106';
+  rate22K: string = '₹ 12,931';
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
-    private authService: AuthService
+    private authService: AuthService,
+    private bullionService: BullionService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.fetchLiveBullionRates();
+    }
+
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
@@ -236,5 +246,23 @@ export class LoginComponent implements OnInit {
 
   initiateFacebookOAuthLogin(): void {
     window.location.href = `${environment.apiUrl}/oauth2/authorization/facebook`;
+  }
+
+  private fetchLiveBullionRates(): void {
+    this.bullionService.getLiveGoldRates().subscribe({
+      next: (rates: GoldRate[]) => {
+        const rate24 = rates.find(r => r.karat.includes('24'));
+        const rate22 = rates.find(r => r.karat.includes('22'));
+        if (rate24 && rate24.price) {
+          this.rate24K = rate24.price.replace(' /gm', '');
+        }
+        if (rate22 && rate22.price) {
+          this.rate22K = rate22.price.replace(' /gm', '');
+        }
+      },
+      error: (err) => {
+        console.warn('Could not fetch live bullion rates on login card:', err);
+      }
+    });
   }
 }

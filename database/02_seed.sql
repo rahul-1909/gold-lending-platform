@@ -5,13 +5,13 @@
 
 USE star_finance_db;
 
--- 1. Seed Bullion / Gold Rates per Gram
+-- 1. Seed Bullion / Gold Rates per Gram (Updated via real-time market API)
 INSERT INTO gold_rates (id, karat_label, rate_per_gram) VALUES
-(1, '24 Karat', 8000.00),
-(2, '22 Karat', 6600.00),
-(3, '18 Karat', 5400.00),
-(4, '14 Karat', 4200.00),
-(5, '8 Karat', 2400.00)
+(1, '24 Karat', 14106.00),
+(2, '22 Karat', 12931.00),
+(3, '18 Karat', 10580.00),
+(4, '14 Karat', 8229.00),
+(5, '8 Karat', 4702.00)
 ON DUPLICATE KEY UPDATE rate_per_gram = VALUES(rate_per_gram);
 
 -- 2. Seed Official KYC Reference Data (Simulating External Government / Verification API)
