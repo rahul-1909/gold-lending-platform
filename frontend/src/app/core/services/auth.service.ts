@@ -71,15 +71,17 @@ interface JwtPayload {
     role?: string | string[]; 
 }
 
+import { environment } from '../../../environments/environment';
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/api/auth';      // Base for auth endpoints
-  private customerUrl = 'http://localhost:8080/api/customer'; // Correct base for customer profile
-  private kycUrl = 'http://localhost:8080/api/kyc';      // Base for KYC endpoints
+  private apiUrl = `${environment.apiUrl}/api/auth`;      // Base for auth endpoints
+  private customerUrl = `${environment.apiUrl}/api/customer`; // Correct base for customer profile
+  private kycUrl = `${environment.apiUrl}/api/kyc`;      // Base for KYC endpoints
   private tokenKey = 'authToken';                      // Key for sessionStorage token storage
-  private employeeUrl = 'http://localhost:8080/api/customer/employee';
+  private employeeUrl = `${environment.apiUrl}/api/customer/employee`;
 
   // NEW: Reactive token state for hydration resilience
   private _tokenSubject = new BehaviorSubject<string | null>(null);
@@ -229,7 +231,7 @@ export class AuthService {
         });
 
         // The endpoint should be '/customer/change-password' or '/employee/change-password'
-        const changeUrl = `http://localhost:8080/api/${endpoint}`; 
+        const changeUrl = `${environment.apiUrl}/api/${endpoint}`; 
         
         // Use responseType: 'text' to handle simple string responses (e.g., "Password updated successfully")
         return this.http.post(changeUrl, payload, { headers, responseType: 'text' as 'json' });

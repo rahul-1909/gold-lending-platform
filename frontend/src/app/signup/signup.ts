@@ -4,6 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../core/services/auth.service';
+import { environment } from '../../environments/environment';
 
 // Custom validator for password matching (returns error for the form group, without modifying controls)
 export const passwordsMatchValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
@@ -98,11 +99,11 @@ export class SignupComponent implements OnInit {
 
   // OAuth initiation for social signup
   initiateGoogleOAuthSignup(): void {
-    window.location.href = 'http://localhost:8080/oauth2/authorization/google';
+    window.location.href = `${environment.apiUrl}/oauth2/authorization/google`;
   }
 
   initiateFacebookOAuthSignup(): void {
-    window.location.href = 'http://localhost:8080/oauth2/authorization/facebook';
+    window.location.href = `${environment.apiUrl}/oauth2/authorization/facebook`;
   }
 
   get f() {

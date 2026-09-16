@@ -5,6 +5,7 @@ import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../core/services/auth.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -230,10 +231,10 @@ export class LoginComponent implements OnInit {
   }
 
   initiateGoogleOAuthLogin(): void {
-    window.location.href = 'http://localhost:8080/oauth2/authorization/google';
+    window.location.href = `${environment.apiUrl}/oauth2/authorization/google`;
   }
 
   initiateFacebookOAuthLogin(): void {
-    window.location.href = 'http://localhost:8080/oauth2/authorization/facebook';
+    window.location.href = `${environment.apiUrl}/oauth2/authorization/facebook`;
   }
 }

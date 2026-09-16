@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs'; 
 import { map } from 'rxjs/operators';
+import { environment } from '../../../../environments/environment';
 
 // ----------------------------------------------------------------------
 // --- 1. INTERFACE DEFINITIONS ---
@@ -107,7 +108,7 @@ export interface CustomerProfile {
   providedIn: 'root'
 })
 export class UserService {
-    private apiUrl = 'http://localhost:8080/api'; 
+    private apiUrl = `${environment.apiUrl}/api`; 
     private customerUrl = `${this.apiUrl}/customer`; 
 
     private _knNumber = new BehaviorSubject<string | null>(null);

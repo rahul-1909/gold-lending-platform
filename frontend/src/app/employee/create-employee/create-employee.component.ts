@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { AuthService } from '../../core/services/auth.service'; // Assuming AuthService for API base URL or token
+import { environment } from '../../../environments/environment';
 
 // Import Angular Material components (adjust imports based on your existing setup)
 import { MatCardModule } from '@angular/material/card';
@@ -71,7 +72,7 @@ export class CreateEmployeeComponent implements OnInit {
   }, 0);
 
   const formValue = this.createEmployeeForm.value;
-  const apiUrl = 'http://localhost:8080/api/customer/employee/create';
+  const apiUrl = `${environment.apiUrl}/api/customer/employee/create`;
 
   // Retrieve and validate token upfront
   const token = this.authService.getToken();

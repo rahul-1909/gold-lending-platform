@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 
 // Interface matching the backend GoldRateResponse DTO
 export interface GoldRate {
@@ -16,7 +17,7 @@ export interface GoldRate {
   providedIn: 'root'
 })
 export class BullionService {
-  private apiUrl = 'http://localhost:8080/api/bullion/rates'; 
+  private apiUrl = `${environment.apiUrl}/api/bullion/rates`; 
 
   constructor(private http: HttpClient) { }
 
