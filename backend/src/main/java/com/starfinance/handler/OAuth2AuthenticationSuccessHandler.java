@@ -19,6 +19,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final JwtService jwtService;
     private final OAuthUserService oAuthUserService;
 
+    @org.springframework.beans.factory.annotation.Value("${frontend.url:https://starfinance-app.vercel.app}")
+    private String frontendUrl;
+
     public OAuth2AuthenticationSuccessHandler(JwtService jwtService, OAuthUserService oAuthUserService) {
         this.jwtService = jwtService;
         this.oAuthUserService = oAuthUserService;
@@ -27,6 +30,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException {
+        String baseUrl = (frontendUrl != null && !frontendUrl.isBlank()) ? frontendUrl : "https://starfinance-app.vercel.app";
         if (authentication.getPrincipal() instanceof OAuth2User oAuth2User) {
             oAuthUserService.createOrGetCustomer(
                     (OAuth2User) authentication.getPrincipal(),
@@ -34,9 +38,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                     authentication.getAuthorities().stream().map(Object::toString).collect(Collectors.joining(",")));
 
             String jwt = jwtService.generateToken(authentication);
-            response.sendRedirect("http://localhost:4200/login?token=" + jwt);
+            response.sendRedirect(baseUrl + "/login?token=" + jwt);
         } else {
-            response.sendRedirect("http://localhost:4200/login?error=auth_failed");
+            response.sendRedirect(baseUrl + "/login?error=auth_failed");
         }
     }
 }

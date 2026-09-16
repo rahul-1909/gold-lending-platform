@@ -17,6 +17,9 @@ public class OAuth2AuthenticationFailureHandler implements AuthenticationFailure
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    @org.springframework.beans.factory.annotation.Value("${frontend.url:https://starfinance-app.vercel.app}")
+    private String frontendUrl;
+
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                         AuthenticationException exception) throws IOException, ServletException {
@@ -34,7 +37,8 @@ public class OAuth2AuthenticationFailureHandler implements AuthenticationFailure
             );
             objectMapper.writeValue(response.getOutputStream(), error);
         } else {
-            response.sendRedirect("/login?error");
+            String baseUrl = (frontendUrl != null && !frontendUrl.isBlank()) ? frontendUrl : "https://starfinance-app.vercel.app";
+            response.sendRedirect(baseUrl + "/login?error=" + java.net.URLEncoder.encode(exception.getMessage() != null ? exception.getMessage() : "oauth_failed", java.nio.charset.StandardCharsets.UTF_8));
         }
     }
 }
